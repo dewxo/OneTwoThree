@@ -31,49 +31,56 @@
             android:layout_marginTop="150dp"
             android:background="@drawable/waves"/>
 
-    <FrameLayout
-            android:id="@+id/country_code_layout"
-            android:layout_width="@dimen/dimen_50dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_marginTop="53dp"
+
+    <TextView
+            android:id="@+id/msg_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageView"
+            android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@+id/imageView"
-            android:layout_marginRight="@dimen/dimen_10dp"
-            android:layout_marginLeft="@dimen/dimen_10dp"
-            app:layout_constraintRight_toLeftOf="@+id/mobile_no_t_i_layout"
+            android:text="Wait for the code I sent you..."
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:background="@drawable/curve_border_accent">
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimaryDark"/>
 
-        <TextView
-                android:id="@+id/country_code_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center"
-                android:text="+91"
-                android:textSize="@dimen/edit_text_size"/>
-
-    </FrameLayout>
+    <TextView
+            android:id="@+id/msg_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="I sent you a code, it will be detected automatically but if it is not detected you can put it below manually as well"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/msg_1"
+            android:textColor="@color/colorPrimary"/>
 
     <android.support.design.widget.TextInputLayout
-            android:id="@+id/mobile_no_t_i_layout"
+            android:id="@+id/otp_t_i_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="@dimen/dimen_0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="@dimen/dimen_10dp"
+            android:layout_marginLeft="@dimen/dimen_10dp"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="@dimen/dimen_50dp"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintLeft_toRightOf="@+id/country_code_layout"
+            app:layout_constraintTop_toBottomOf="@+id/msg_2"
             android:layout_toRightOf="@+id/country_code_layout"
-            android:hint="@string/enter_mobile_no">
+            android:hint="@string/enter_otp">
 
         <android.support.design.widget.TextInputEditText
-                android:id="@+id/mobile_et"
+                android:id="@+id/otp_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:maxLength="10"/>
+                android:maxLength="6"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -83,8 +90,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="@dimen/dimen_30dp"
-            android:id="@+id/mobile_signIn_bt"
             android:background="@drawable/button_background"
-            app:layout_constraintTop_toBottomOf="@+id/mobile_no_t_i_layout"/>
+            app:layout_constraintTop_toBottomOf="@+id/otp_t_i_layout"/>
 
 </android.support.constraint.ConstraintLayout>

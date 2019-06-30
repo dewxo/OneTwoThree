@@ -29,6 +29,7 @@
     <style name="NoActionBarTheme" parent="AppTheme.NoActionBar">
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="android:textColor">@color/text_color</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimary</item>
 
     </style>

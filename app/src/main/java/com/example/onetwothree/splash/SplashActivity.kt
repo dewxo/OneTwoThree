@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import com.example.onetwothree.home.HomeActivity
 import com.example.onetwothree.R
+import com.example.onetwothree.auth.login.LoginActivity
 
 
 class SplashActivity : AppCompatActivity() {
@@ -16,7 +17,7 @@ class SplashActivity : AppCompatActivity() {
 
         Handler().postDelayed(Runnable {
             run {
-                startActivity(Intent(this, HomeActivity::class.java))
+                startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
         }, 2000)

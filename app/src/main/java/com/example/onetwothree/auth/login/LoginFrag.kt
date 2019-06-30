@@ -1,19 +1,30 @@
 package com.example.onetwothree.auth.login
 
+import android.arch.core.executor.TaskExecutor
 import android.content.Context
+import android.content.res.Configuration
+import android.inputmethodservice.Keyboard
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.TextInputEditText
+import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
+import android.support.v4.util.TimeUtils
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import android.widget.EditText
 import com.example.onetwothree.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.google.android.gms.tasks.TaskExecutors
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCallbacks
+import kotlinx.android.synthetic.main.fragment_login.view.*
+import java.util.concurrent.TimeUnit
 
 /**
  * A simple [Fragment] subclass.
@@ -26,19 +37,14 @@ private const val ARG_PARAM2 = "param2"
  */
 
 
-class LoginFrag : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    private var listener: OnFragmentInteractionListener? = null
+class LoginFrag : Fragment(), TextWatcher {
 
+    private var rootView: View? = null
+    private var mobileNoEt: TextInputEditText? = null;
+    private var mobileNoITLayout: TextInputLayout? = null;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -46,26 +52,47 @@ class LoginFrag : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        rootView = inflater.inflate(R.layout.fragment_login, container, false)
+        mobileNoEt = rootView!!.findViewById(R.id.mobile_et)
+        mobileNoITLayout = rootView!!.findViewById(R.id.mobile_no_t_i_layout)
+        mobileNoEt?.setRawInputType(Configuration.KEYBOARD_12KEY);
+
+        /*
+        * click listener for buttons
+        */
+        rootView!!.mobile_signIn_bt.setOnClickListener(View.OnClickListener {
+
+            if (isMobileNoValid())
+                activity?.supportFragmentManager?.beginTransaction()?.addToBackStack(null)
+                    ?.replace(
+                        R.id.container,
+                        VerifyPhoneFrag.newInstance(mobileNo = mobileNoEt?.text.toString())
+                    )?.commit()
+        })
+
+        /*
+        *attach Text watcher listener for text change
+        */
+
+        mobileNoEt?.addTextChangedListener(this)
+        return rootView;
+
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }
+
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-        }
+//        if (context is OnFragmentInteractionListener) {
+//            listener = context
+//        } else {
+//            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+//        }
     }
 
     override fun onDetach() {
         super.onDetach()
-        listener = null
     }
 
     /**
@@ -84,25 +111,30 @@ class LoginFrag : Fragment() {
         fun onFragmentInteraction(uri: Uri)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LoginFrag.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LoginFrag().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun afterTextChanged(s: Editable?) {
     }
 
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        isMobileNoValid()
+    }
+
+
+    private fun isMobileNoValid(): Boolean {
+        if (mobileNoEt?.text.toString().trim().isEmpty()) {
+            mobileNoEt?.requestFocus()
+            mobileNoITLayout?.error = getString(R.string.enter_mobile_no_required)
+            return false
+        } else if (mobileNoEt?.text.toString().length < 10) {
+            mobileNoEt?.requestFocus()
+            mobileNoITLayout?.error = getString(R.string.error_mobile_no_length)
+            return false
+        } else {
+            mobileNoITLayout?.isErrorEnabled = false
+        }
+        return true
+    }
 }
 
